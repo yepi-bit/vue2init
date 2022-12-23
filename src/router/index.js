@@ -14,6 +14,11 @@ const routes = [
     path: '/about',
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/imgOpera',
+    name: 'ImgOpera',
+    component: () => import(/* webpackChunkName: "about" */ '../views/ImgOpera.vue')
   }
 ]
 
