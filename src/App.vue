@@ -15,6 +15,10 @@
       <router-link to="/imgOpera">
         <el-button size="mini">ImgOpera</el-button>
       </router-link>
+      |
+      <router-link to="/gridData">
+        <el-button size="mini">GridData</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">

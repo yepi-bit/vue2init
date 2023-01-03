@@ -19,6 +19,11 @@ const routes = [
     path: '/imgOpera',
     name: 'ImgOpera',
     component: () => import(/* webpackChunkName: "about" */ '../views/ImgOpera.vue')
+  },
+  {
+    path: '/gridData',
+    name: 'GridData',
+    component: () => import(/* webpackChunkName: "about" */ '../views/GridData.vue')
   }
 ]
 
