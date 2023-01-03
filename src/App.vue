@@ -16,11 +16,39 @@
         <el-button size="mini">ImgOpera</el-button>
       </router-link>
     </div>
-    <router-view/>
+    <router-view v-slot="{ Component }">
+      <transition :name="transitionName">
+        <keep-alive :include="['about','imgOpera']">
+          <component :is="Component"/>
+        </keep-alive>
+      </transition>
+    </router-view>
   </div>
 </template>
+<script>
+import routes from "./router/index.js";
 
-<style scoped>
+export default {
+  data() {
+    return {
+      transitionName: 'go',
+    }
+  },
+  watch: {
+    '$route'(to, from) {
+      let noAnimation = ['/', '/imgOpera']
+      if (noAnimation.indexOf(from.path) !== -1 && noAnimation.indexOf(to.path) !== -1) {
+        console.log('只有第一次进入')
+        return this.transitionName = ''
+      }
+      const toDepth = routes.options.routes.findIndex(v => v.path === to.path)
+      const fromDepth = routes.options.routes.findIndex(v => v.path === from.path)
+      this.transitionName = toDepth > fromDepth ? 'go' : 'back'
+    },
+  },
+}
+</script>
+<style lang="less" scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -58,5 +86,39 @@ img {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.go-enter-from {
+  transform: translate3d(100%, 0, 0);
+}
+
+.back-enter-to, .back-enter-from, .go-enter-to, .go-leave-from {
+  transform: translate3d(0, 0, 0);
+}
+
+.go-leave-to {
+  transform: translate3d(-100%, 0, 0);
+}
+
+.go-enter-active, .go-leave-active, .back-enter-active, .back-leave-active {
+  transition: all .3s;
+}
+
+.back-enter-from {
+  transform: translate3d(-100%, 0, 0);
+}
+
+.back-leave-to {
+  transform: translate3d(100%, 0, 0);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
