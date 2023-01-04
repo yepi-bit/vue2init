@@ -24,6 +24,11 @@ const routes = [
     path: '/gridData',
     name: 'GridData',
     component: () => import(/* webpackChunkName: "about" */ '../views/GridData.vue')
+  },
+  {
+    path: '/danmu',
+    name: 'Danmu',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Danmu.vue')
   }
 ]
 

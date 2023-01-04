@@ -19,6 +19,10 @@
       <router-link to="/gridData">
         <el-button size="mini">GridData</el-button>
       </router-link>
+      |
+      <router-link to="/danmu">
+        <el-button size="mini">Danmu</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">
