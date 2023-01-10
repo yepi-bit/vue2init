@@ -10,7 +10,7 @@
       <el-button type="danger" :icon="start === 0 ? 'el-icon-video-pause':'el-icon-video-play'" circle
                  @click="pause"></el-button>
     </p>
-    <vue-danmaku ref="dan" v-model="danmus" loop randomChannel isSuspend extraStyle="rgba(1,1,2,3)" speeds="120" :right="10"
+    <vue-danmaku ref="dan" v-model="danmus" loop randomChannel isSuspend extraStyle="rgba(1,1,2,3)" :speeds=120 :right="10"
                  style="height:200px; width:100%;"></vue-danmaku>
     <div style="width: 30vw;margin: auto">
       <el-input placeholder="请输入需要发送的弹幕！" v-model="input" @keyup.enter.native="send">

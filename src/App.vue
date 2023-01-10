@@ -4,6 +4,7 @@
          src="https://static.nowcoder.com/fe/file/site/www-web/prod/1.0.174/imageAssets/b4b454fe980c8bf3aee6.png"
          alt="">
     <div id="nav">
+      <span :style="{color : widths ? getRandomColor : ''}">{{ widths }}</span>
       <router-link to="/">
         <el-button size="mini">Home</el-button>
       </router-link>
@@ -40,6 +41,7 @@ export default {
   data() {
     return {
       transitionName: 'go',
+      widths: 0
     }
   },
   watch: {
@@ -53,10 +55,48 @@ export default {
       const fromDepth = routes.options.routes.findIndex(v => v.path === from.path)
       this.transitionName = toDepth > fromDepth ? 'go' : 'back'
     },
+    widths: {
+      handler(news, olds) {
+        window.onresize = () => {
+          return (() => {
+            this.widths = document.body.clientWidth
+          })()
+        }
+      }, immediate: true
+    }
   },
+  computed: {
+    getRandomColor() {
+      if(this.widths) {
+        return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+      }
+    }
+  }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
+@media (prefers-color-scheme: dark) {
+  color: royalblue;
+}
+
+@media (prefers-color-scheme: light) {
+  color: cadetblue;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+@media screen and (max-width: 1024px) {
+  body {
+    background-color: rgba(0, 0, 0, .3);
+  }
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
