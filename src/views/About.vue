@@ -1,19 +1,8 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
+    <el-button @click="toDynamicRouter()">跳toDynamicRouter</el-button>
     <div v-for="(item, index) in list" :key="index">
-      <div style="margin-top: 14px">
-        <el-select v-model="item.value" placeholder="请选择">
-          <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
-    </div>
-    <div v-for="(item, index) in list2" :key="index">
       <div style="margin-top: 14px">
         <el-select v-model="item.value" placeholder="请选择">
           <el-option
@@ -69,9 +58,26 @@ export default {
       value: ''
     }
   },
-  watch:{
-
-  }
+  beforeRouteEnter(to, from, next) {
+    console.log(to, from, '--------beforeRouteEnter-about')
+    next()   // next() 表示继续执行页面,要加上的,否则不显示
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.log(to, from, '--------beforeRouteUpdate-about')
+    next()
+  },
+  beforeRouteLeave(to, from, next) {
+    console.log(to, from, '--------beforeRouteLeave-about')
+    next()
+  },
+  methods: {
+    toDynamicRouter() {
+      this.$router.push({
+        path: '/dynamicRouter/123456-0'
+      })
+    },
+  },
+  watch: {}
 }
 </script>
 <style scoped>

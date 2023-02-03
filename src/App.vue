@@ -9,7 +9,7 @@
         <el-button size="mini">Home</el-button>
       </router-link>
       |
-      <router-link to="/about">
+      <router-link :to="{path:'/about',query:{t: new Date()}}">
         <el-button size="mini">About</el-button>
       </router-link>
       |
@@ -23,6 +23,10 @@
       |
       <router-link to="/danmu">
         <el-button size="mini">Danmu</el-button>
+      </router-link>
+      |
+      <router-link to="/dynamicRouter">
+        <el-button size="mini">DynamicRouter</el-button>
       </router-link>
     </div>
     <router-view v-slot="{ Component }">
@@ -44,6 +48,17 @@ export default {
       widths: 0
     }
   },
+  activated() {
+    // 当缓存组件有被显示出来时，会触发这个钩子函数
+    console.log(100);
+  },
+  deactivated() {
+    // 当缓存的组件隐藏时，会触发这个钩子函数；
+    console.log(200);
+  },
+  errorCaptured(err) {
+    console.log(err)
+  },
   watch: {
     '$route'(to, from) {
       let noAnimation = ['/', '/imgOpera']
@@ -54,6 +69,7 @@ export default {
       const toDepth = routes.options.routes.findIndex(v => v.path === to.path)
       const fromDepth = routes.options.routes.findIndex(v => v.path === from.path)
       this.transitionName = toDepth > fromDepth ? 'go' : 'back'
+      console.log(this.transitionName)
     },
     widths: {
       handler(news, olds) {
@@ -67,7 +83,7 @@ export default {
   },
   computed: {
     getRandomColor() {
-      if(this.widths) {
+      if (this.widths) {
         return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
       }
     }
