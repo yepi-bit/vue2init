@@ -1,13 +1,19 @@
 <template>
   <div>
-    1
+    <div class="header">鉴定是否动态路由</div>
     <el-button @click="toSelfDynamicRouter()" type="primary">跳toSelfDynamicRouter</el-button>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "DynamicRouter",
+  data() {
+    return {
+      color: 'orange'
+    }
+  },
   beforeRouteEnter(to, from, next) {
     console.log(to, from, '--------beforeRouteEnter-DynamicRouter')
     next()  // next() 表示继续执行页面,要加上的,否则不显示
@@ -20,10 +26,10 @@ export default {
     console.log(to, from, '--------beforeRouteLeave-DynamicRouter')
     next()
   },
-  methods:{
+  methods: {
     toSelfDynamicRouter() {
       this.$router.push({
-        path: '/dynamicRouter/123456-1'
+        path: `/dynamicRouter/${(Math.random() * 1000000).toFixed(0)}`
       })
     }
   }
@@ -31,5 +37,7 @@ export default {
 </script>
 
 <style scoped>
-
+.header {
+  color: v-bind(color)
+}
 </style>

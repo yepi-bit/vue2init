@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import getToken, {setToken} from '../http/auth.js'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,10 @@ const router = new VueRouter({
 
 // 两个一起只作用一个
 router.beforeEach((to, from, next) => {
+    setToken('abcdefghijklmn')
+    if (getToken) {
+        console.log(getToken, 'getToken')
+    }
     console.log(to.path, from, '------------------1')
     if (to.path === '/') {
         next()

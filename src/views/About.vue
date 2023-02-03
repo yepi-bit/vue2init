@@ -70,10 +70,14 @@ export default {
     console.log(to, from, '--------beforeRouteLeave-about')
     next()
   },
+  activated() {
+    // 当缓存组件有被显示出来时，会触发这个钩子函数
+    console.log(100);
+  },
   methods: {
     toDynamicRouter() {
       this.$router.push({
-        path: '/dynamicRouter/123456-0'
+        path: `/dynamicRouter/${(Math.random() * 1000000).toFixed(0)}`
       })
     },
   },
