@@ -28,6 +28,14 @@
       <router-link to="/dynamicRouter">
         <el-button size="mini">DynamicRouter</el-button>
       </router-link>
+      |
+      <router-link to="/new23-02-08">
+        <el-button size="mini">23-02-08</el-button>
+      </router-link>
+      |
+      <router-link to="/childrenAndParent">
+        <el-button size="mini">childrenAndParent</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">

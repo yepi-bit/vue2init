@@ -21,6 +21,7 @@
 export default {
   data() {
     return {
+      about:'about',
       list: [
         {
           value: '选项2',

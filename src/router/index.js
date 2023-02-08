@@ -36,6 +36,16 @@ const routes = [
         path: '/dynamicRouter/:id',
         name: 'dynamicRouter',
         component: () => import('../views/DynamicRouter.vue')
+    },
+    {
+        path: '/new23-02-08',
+        name: 'new23-02-08',
+        component: () => import('../views/new23-02-08.vue')
+    },
+    {
+        path: '/childrenAndParent',
+        name: 'childrenAndParent',
+        component: () => import('../views/ChildrenAndParent.vue')
     }
 ]
 const routes2 = {
