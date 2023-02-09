@@ -30,8 +30,8 @@ export default {
     },
     clickChild2() {
       console.log(this.$children)
-      console.log(this.$children[0].msg);
-      console.log(this.$children[1].msg);
+      console.log(this.$children[0].msg)
+      console.log(this.$children[1].msg)
     }
   }
 }

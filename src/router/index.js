@@ -48,11 +48,11 @@ const routes = [
         component: () => import('../views/ChildrenAndParent.vue')
     }
 ]
-const routes2 = {
+const routes2 = [{
     path: '/about',
     name: 'About',
     component: () => import('../views/About.vue')
-}
+}]
 // 动态路由前期工作
 let commonUser = ['About', 'Danmu'];
 let commonUserRoute = routes.filter(function (page) {
@@ -60,6 +60,7 @@ let commonUserRoute = routes.filter(function (page) {
 })
 console.log(commonUserRoute);
 const router = new VueRouter({
+    mode: 'history',  // 默认hash
     routes
 })
 // 动态路由
