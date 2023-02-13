@@ -46,6 +46,16 @@ const routes = [
         path: '/childrenAndParent',
         name: 'childrenAndParent',
         component: () => import('../views/ChildrenAndParent.vue')
+    },
+    {
+        path: '/securityPlatform',
+        name: 'securityPlatform',
+        component: () => import('../views/securityPlatform.vue')
+    },
+    {
+        path: '/clickVideo',
+        name: 'clickVideo',
+        component: () => import('../views/ClickVideo.vue')
     }
 ]
 const routes2 = [{

@@ -36,6 +36,14 @@
       <router-link to="/childrenAndParent">
         <el-button size="mini">childrenAndParent</el-button>
       </router-link>
+      |
+      <router-link to="/securityPlatform">
+        <el-button size="mini">securityPlatform</el-button>
+      </router-link>
+      |
+      <router-link to="/clickVideo">
+        <el-button size="mini">clickVideo</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">
