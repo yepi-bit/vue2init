@@ -44,6 +44,10 @@
       <router-link to="/clickVideo">
         <el-button size="mini">clickVideo</el-button>
       </router-link>
+      |
+      <router-link to="/srollTable">
+        <el-button size="mini">srollTable</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">

@@ -56,6 +56,11 @@ const routes = [
         path: '/clickVideo',
         name: 'clickVideo',
         component: () => import('../views/ClickVideo.vue')
+    },
+    {
+        path: '/srollTable',
+        name: 'srollTable',
+        component: () => import('../views/srollTable.vue')
     }
 ]
 const routes2 = [{
