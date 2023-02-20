@@ -242,7 +242,7 @@ export default {
     }, 1000)
   },
   destroyed() {
-    this.nowDate = null
+    clearInterval(this.nowDate)
   },
   methods: {
     // 时间戳：1637244864707
