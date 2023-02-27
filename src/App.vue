@@ -48,6 +48,10 @@
       <router-link to="/srollTable">
         <el-button size="mini">srollTable</el-button>
       </router-link>
+      |
+      <router-link to="/iframe">
+        <el-button size="mini">iframe</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">

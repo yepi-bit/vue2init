@@ -61,6 +61,11 @@ const routes = [
         path: '/srollTable',
         name: 'srollTable',
         component: () => import('../views/srollTable.vue')
+    },
+    {
+        path: '/iframe',
+        name: 'iframe',
+        component: () => import('../views/iframe.vue')
     }
 ]
 const routes2 = [{
