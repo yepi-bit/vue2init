@@ -66,6 +66,11 @@ const routes = [
         path: '/iframe',
         name: 'iframe',
         component: () => import('../views/iframe.vue')
+    },
+    {
+        path: '/fileSplict',
+        name: 'fileSplict',
+        component: () => import('../views/fileSplict.vue')
     }
 ]
 const routes2 = [{
