@@ -4,6 +4,8 @@ import store from './store'
 import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
+import * as L from 'leaflet';
 import * as echarts from 'echarts';  // /引入echarts(5.0以上版本去除了exprot default)
 Vue.prototype.$echarts = echarts
 

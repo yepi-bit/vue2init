@@ -5043,6 +5043,11 @@ launch-editor@^2.2.1, launch-editor@^2.6.0:
     picocolors "^1.0.0"
     shell-quote "^1.7.3"
 
+leaflet@^1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.9.3.tgz#52ec436954964e2d3d39e0d433da4b2500d74414"
+  integrity sha512-iB2cR9vAkDOu5l3HAay2obcUHZ7xwUBBjph8+PGtmW/2lYhbLizWtG7nTeYht36WfOslixQF9D/uSIzhZgGMfQ==
+
 less-loader@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-5.0.0.tgz#498dde3a6c6c4f887458ee9ed3f086a12ad1b466"

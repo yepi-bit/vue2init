@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img style="float: left" width="182" height="116"
+    <img class="imgs" style="float: left" width="182" height="116"
          src="https://static.nowcoder.com/fe/file/site/www-web/prod/1.0.174/imageAssets/b4b454fe980c8bf3aee6.png"
          alt="">
     <div id="nav">
@@ -55,6 +55,10 @@
       |
       <router-link to="/fileSplict">
         <el-button size="mini">fileSplict</el-button>
+      </router-link>
+      |
+      <router-link to="/map2d">
+        <el-button size="mini">map2d</el-button>
       </router-link>
     </div>
     <router-view v-slot="{ Component }">
@@ -149,7 +153,7 @@ export default {
   color: #2c3e50;
 }
 
-img {
+.imgs {
   animation: move 2s infinite;
   -webkit-animation: move 2s infinite;
 }

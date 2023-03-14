@@ -71,6 +71,11 @@ const routes = [
         path: '/fileSplict',
         name: 'fileSplict',
         component: () => import('../views/fileSplict.vue')
+    },
+    {
+        path: '/map2d',
+        name: 'map2d',
+        component: () => import('../views/map2d.vue')
     }
 ]
 const routes2 = [{
