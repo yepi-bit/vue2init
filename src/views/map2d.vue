@@ -11,6 +11,7 @@ export default {
       map: null,
       tileLayer: null,
       plotLayer: null,
+      peoplePoint: null,
       polygonList: [],
       peopleData: [
         {
@@ -100,6 +101,11 @@ export default {
           "controllerPhone": "15856952044,13999999999,13333333333",
           "policePhone": "0665890198987"
         }
+      ],
+      peopelLine:[
+        {gis: "39.898109,116.34419"},
+        {gis: "39.896338,116.418354"},
+        {gis: "39.883051, 116.377535"}
       ]
     }
   },
@@ -108,6 +114,7 @@ export default {
     this.initPoint(this.peopleData)
     this.areaInfo(this.areaData)
     this.isWarnPointInpoly(this.alonePeople)
+    this.startPoint(this.peopelLine)
   },
   methods: {
     //初始化地图
@@ -127,6 +134,7 @@ export default {
       this.layerPeople = new L.FeatureGroup().addTo(this.map)
       this.plotLayer = new L.FeatureGroup().addTo(this.map)
       this.plotLayerTemp = new L.FeatureGroup().addTo(this.map)
+      this.peoplePoint = new L.FeatureGroup().addTo(this.map)
     },
     initPoint(data) {
       this.markerList = []
@@ -160,6 +168,52 @@ export default {
         }
       }
     },
+    startPoint(data) {
+      var lineList = [];
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        if (item.gis != null && item.gis != "") {
+          if (i == 0) {
+            var inhtml = '<div><img src="' + require("@/assets/start_icon.png") + '" style="width: 20px;height: 33px;"></div>';
+            var icon = L.divIcon({
+              className: 'myDivIcon',
+              iconSize: [20, 33],
+              iconAnchor: [8, 32],
+              html: inhtml
+            });
+            var LatLng = item.gis.split(",");
+            const marker = L.marker([LatLng[0], LatLng[1]], {icon: icon});
+            this.peoplePoint.addLayer(marker);
+            lineList.push([LatLng[0], LatLng[1]]);
+          } else if (i == data.length - 1) {
+            var inhtml = '<div><img src="' + require("@/assets/end_icon.png") + '" style="width: 20px;height: 33px;"></div>';
+            var icon = L.divIcon({
+              className: 'myDivIcon',
+              iconSize: [20, 33],
+              iconAnchor: [8, 32],
+              html: inhtml
+            });
+            var LatLng = item.gis.split(",");
+            const marker = L.marker([LatLng[0], LatLng[1]], {icon: icon});
+            this.peoplePoint.addLayer(marker);
+            lineList.push([LatLng[0], LatLng[1]]);
+          } else {
+            var LatLng = item.gis.split(",");
+            lineList.push([LatLng[0], LatLng[1]]);
+          }
+        }
+      }
+      if (lineList.length > 1) {
+        var polygon = L.polyline(lineList, {
+          color: '#3dff70',
+          weight: 3,
+          opacity: 0.8,
+          fillColor: '#3dff70',
+          fillOpacity: 0.8
+        }).addTo(this.peoplePoint);
+      }
+    },
+    // 人员区域
     areaInfo(data) {
       this.plotLayer.clearLayers();
       for (var i = 0; i < data.length; i++) {
