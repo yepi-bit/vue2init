@@ -60,6 +60,10 @@
       <router-link to="/map2d">
         <el-button size="mini">map2d</el-button>
       </router-link>
+      |
+      <router-link to="/areaMap">
+        <el-button size="mini">areaMap</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">

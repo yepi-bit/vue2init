@@ -76,6 +76,11 @@ const routes = [
         path: '/map2d',
         name: 'map2d',
         component: () => import('../views/map2d.vue')
+    },
+    {
+        path: '/areaMap',
+        name: 'areaMap',
+        component: () => import('../views/areaMap.vue')
     }
 ]
 const routes2 = [{
