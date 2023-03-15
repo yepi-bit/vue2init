@@ -1,0 +1,100 @@
+.leaflet-container {
+   background-color:  #10132a;
+}
+.map {
+    height: 100%;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    min-width: 200px;
+    min-height: 200px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color:  #eeeeee;
+}
+
+.locationctl {
+    position: absolute;
+    z-index: 999;
+    left: 100px;
+    bottom: 2px;
+
+    white-space: nowrap;
+    font-size: 14px;
+    color: #333;
+    text-shadow: #edeaea 1px 0 0,#edeaea 0 1px 0,#edeaea -1px 0 0,#edeaea 0 -1px 0;
+}
+
+
+.centerat_animation {
+    height: 30px;
+    width: 30px;
+    margin-left: -15px;
+    margin-top: -15px;
+    /*float: left;*/
+    border-radius: 25px;
+    background: rgb(219, 238, 23);
+    transform: scale(0);
+    animation: centerat_animation_first 1.5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes centerat_animation_first {
+    to {
+        transform: scale(3);
+        background: rgba(0, 0, 0, 0);
+    }
+}
+
+.leaflet-text-marker {
+    white-space: nowrap;
+    font-size: 13px;
+    color: #333;
+    text-shadow: #edeaea 1px 0 0,#edeaea 0 1px 0,#edeaea -1px 0 0,#edeaea 0 -1px 0;
+}
+
+
+.leaflet-popup-content-wrapper {
+  border-radius: 3px;
+}
+
+.mars-popup-titile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 3px 0 0 3px;
+    padding: 0 80px 0 20px;
+    height: 42px;
+    line-height: 42px;
+    font-size: 16px;
+    color: white;
+    background-color: #20a0ff;
+    border-bottom: 1px solid #eee;
+    overflow: hidden;
+}
+.mars-popup-content {
+    min-width:150px;
+    margin-top: 52px;
+    font-size: 14px;
+}
+.mars-popup-content label {
+    margin: 0 10px;
+    min-width:50px;
+}
+
+
+.leaflet-measuretool-result {
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid transparent;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    font-size: 13px;
+    padding: 2px 4px;
+    height: 25px;
+    white-space: nowrap;
+}

@@ -1,5 +1,19 @@
 <template>
-  <div id="map"></div>
+  <div class="gis">
+    <div id="map"></div>
+    <div class="searchBox">
+      <el-dropdown split-button placement="top">
+        更多菜单
+        <el-dropdown-menu slot="dropdown">
+          <el-button @click="drawPolyline">画线</el-button>
+          <el-button @click="drawCircle">画圆</el-button>
+          <el-button @click="drawRectangle">画矩形</el-button>
+          <el-button @click="drawPolygon">画多边形</el-button>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-button style="margin-left: 12px" @click="clearDrawLine">重置</el-button>
+    </div>
+  </div>
 </template>
 <script>
 import L from 'leaflet'
@@ -12,6 +26,8 @@ export default {
       tileLayer: null,
       plotLayer: null,
       peoplePoint: null,
+      workDraw: null,
+      layerRPeople: null,
       polygonList: [],
       peopleData: [
         {
@@ -106,7 +122,11 @@ export default {
         {gis: "39.898109,116.34419"},
         {gis: "39.896338,116.418354"},
         {gis: "39.883051, 116.377535"}
-      ]
+      ],
+      circleList:[],
+      markerList:[],
+      recoard:[],
+      lineList:[]
     }
   },
   mounted() {
@@ -135,6 +155,238 @@ export default {
       this.plotLayer = new L.FeatureGroup().addTo(this.map)
       this.plotLayerTemp = new L.FeatureGroup().addTo(this.map)
       this.peoplePoint = new L.FeatureGroup().addTo(this.map)
+      this.layerRPeople = new L.FeatureGroup().addTo(this.map)
+
+      var _this = this
+      this.workDraw = new L.mars.Draw({
+        map: this.map,
+        isOnly: true,
+        onCreate: function (e) {
+          // 圆形
+          if (e.layerType == 'circle') {
+            var layer = e.layer
+            _this.circleList.push(layer);
+            const lnglat = e.layer.getLatLng();
+            _this.lat = lnglat.lat;
+            _this.lon = lnglat.lng;
+            // window.layerMarker = [lnglat.lat, lnglat.lng];
+            for (let i = 0; i < _this.markerList.length; i++) {
+              var item = _this.markerList[i]
+              var point = {lng: JSON.parse(item.lon), lat: JSON.parse(item.lat)}
+              var pointC = _this.isPointInCircle(point, layer)
+              if (pointC == true) {
+                _this.recoard.push(item)
+              }
+            }
+            if (_this.recoard.length > 0) {
+              _this.changePoint(_this.recoard)
+            }
+          }
+          // 多边形
+          if (e.layerType == 'polygon') {
+            var layer = e.layer
+            const latlng = layer.toGeoJSON()
+            const geometryBuffer = latlng.geometry.coordinates[0]
+            const dataPoint = []
+            for (var i = 0; i < geometryBuffer.length; i++) {
+              var item = geometryBuffer[i]
+              dataPoint.push({
+                lat: item[1],
+                lng: item[0]
+              })
+            }
+            _this.polygon = dataPoint;
+            for (let i = 0; i < _this.markerList.length; i++) {
+              var item = _this.markerList[i]
+              var pointC = _this.IsPtInPoly(JSON.parse(item.lon), JSON.parse(item.lat), dataPoint)
+              if (pointC == true) {
+                _this.recoard.push(item)
+              }
+            }
+            if (_this.recoard.length > 0) {
+              _this.changePoint(_this.recoard)
+            }
+          }
+          // 矩形
+          if (e.layerType == 'rectangle') {
+            var layer = e.layer
+            const latlng = layer.toGeoJSON()
+            const geometryBuffer = latlng.geometry.coordinates[0]
+            const dataPoint = []
+            for (var i = 0; i < geometryBuffer.length; i++) {
+              var item = geometryBuffer[i]
+              dataPoint.push({
+                lat: item[1],
+                lng: item[0]
+              })
+            }
+            for (let i = 0; i < _this.markerList.length; i++) {
+              console.log('123')
+              var item = _this.markerList[i]
+              var pointC = _this.IsPtInPoly(JSON.parse(item.lon), JSON.parse(item.lon), dataPoint)
+              if (pointC == true) {
+                _this.recoard.push(item)
+              }else {
+                console.log('pointC为false')
+              }
+            }
+            if (_this.recoard.length > 0) {
+              _this.changePoint(_this.recoard)
+            }
+          }
+          // 画线
+          if (e.layerType == 'polyline') {
+            var layer = e.layer;
+            _this.lineList.push(layer);
+            var latlng = layer.getLatLngs();
+            var latlngList = [];
+
+            for (let i = 0; i < latlng.length; i++) {
+              latlngList.push([latlng[i].lng, latlng[i].lat]);
+            }
+            _this.polygon = latlngList;
+            var lineString = turf.lineString(latlngList);
+            for (let i = 0; i < _this.markerList.length; i++) {
+              var item = _this.markerList[i];
+              var point = turf.point([JSON.parse(item.lon), JSON.parse(item.lon
+              )]);
+              var isPointOnLine = turf.booleanPointOnLine(point, lineString);
+              if (isPointOnLine == true) {
+                _this.recoard.push(item)
+              }
+            }
+            if (_this.recoard.length > 0) {
+              _this.changePoint(_this.recoard)
+            }
+          }
+        },
+      })
+    },
+    drawPolyline() {
+      this.workDraw.stopDraw();
+      this.workDraw.clearDraw()
+      this.recoard = [];
+      this.circleList = [];
+      this.workDraw.startDraw('polyline', {style: {fill: true, fillOpacity: 0.1, color: '#0000ff', weight: 1.5}})
+    },
+    drawCircle() {
+      this.workDraw.stopDraw();
+      this.workDraw.clearDraw()
+      this.recoard = [];
+      this.circleList = [];
+      this.workDraw.startDraw('circle', {style: {fill: true, fillOpacity: 0.1, color: '#0000ff', weight: 1}})
+    },
+    drawRectangle() {
+      this.workDraw.stopDraw();
+      this.workDraw.clearDraw()
+      this.recoard = [];
+      this.circleList = [];
+      this.workDraw.startDraw('rectangle', {style: {fill: true, fillOpacity: 0.1, color: '#0000ff', weight: 1}})
+    },
+    drawPolygon() {
+      this.workDraw.stopDraw();
+      this.workDraw.clearDraw()
+      this.recoard = [];
+      this.circleList = [];
+      this.workDraw.startDraw('polygon', {style: {fill: true, fillOpacity: 0.1, color: '#0000ff', weight: 1}})
+    },
+    clearDrawLine() {
+      this.workDraw.stopDraw();
+      this.workDraw.clearDraw()
+    },
+    // 画线查找范围内所有人员位置
+    changePoint(data) {
+      this.peopleInfo = data;
+      this.layerRPeople.clearLayers()
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        if (item.lat != null && item.lon != null) {
+          var inhtml = '<div><img src="' + require("@/assets/wk.png") + '" style="width: 16px;height: 16px;"></div>';
+          var icon = L.divIcon({
+            className: 'myDivIcon',
+            iconSize: [19, 23],
+            iconAnchor: [6, 8],
+            html: inhtml
+          })
+
+          var latlng = [JSON.parse(item.lat), JSON.parse(item.lon)]
+          const marker = L.marker(latlng, {icon: icon})
+          marker.attr = item
+          this.layerRPeople.addLayer(marker)
+        }
+      }
+    },
+    /**
+     *  判断一个点是否在圆的内部
+     *  @param point  测试点坐标
+     *  @param circle 圆心坐标
+     *  返回true为真，false为假
+     *  */
+    isPointInCircle: function (point, circle) {
+      // point与圆心距离小于圆形半径，则点在圆内，否则在圆外
+      var c = circle.getLatLng()
+      var r = circle.getRadius()
+
+      var dis = this.getDistance(point, c)
+      if (dis <= r) {
+        return true
+      } else {
+        return false
+      }
+    },
+    getDistance: function (point1, point2) {
+      var EARTHRADIUS = 6370996.81
+      point1.lng = this._getLoop(point1.lng, -180, 180)
+      point1.lat = this._getRange(point1.lat, -74, 74)
+      point2.lng = this._getLoop(point2.lng, -180, 180)
+      point2.lat = this._getRange(point2.lat, -74, 74)
+
+      var x1, x2, y1, y2
+      x1 = this.degreeToRad(point1.lng)
+      y1 = this.degreeToRad(point1.lat)
+      x2 = this.degreeToRad(point2.lng)
+      y2 = this.degreeToRad(point2.lat)
+
+      return EARTHRADIUS * Math.acos((Math.sin(y1) * Math.sin(y2) + Math.cos(y1) * Math.cos(y2) * Math.cos(x2 - x1)))
+    },
+    degreeToRad: function (degree) {
+      return Math.PI * degree / 180
+    },
+    /**
+     * 将v值限定在a,b之间，经度使用
+     */
+    _getLoop: function (v, a, b) {
+      while (v > b) {
+        v -= b - a
+      }
+      while (v < a) {
+        v += b - a
+      }
+      return v
+    },
+    /**
+     * 将v值限定在a,b之间，纬度使用
+     */
+    _getRangefunction(v, a, b) {
+      if (a != null) {
+        v = Math.max(v, a)
+      }
+      if (b != null) {
+        v = Math.min(v, b)
+      }
+      return v
+    },
+    /**
+     * 将v值限定在a,b之间，纬度使用
+     */
+    _getRange: function (v, a, b) {
+      if (a != null) {
+        v = Math.max(v, a)
+      }
+      if (b != null) {
+        v = Math.min(v, b)
+      }
+      return v
     },
     initPoint(data) {
       this.markerList = []
@@ -297,10 +549,22 @@ export default {
   }
 }
 </script>
-<style scoped>
-#map {
-  width: 100vw;
-  height: 90vh;
-  background-color: #012f47;
+<style lang="less" scoped>
+.gis {
+  position: relative;
+  #map {
+    width: 100vw;
+    height: 90vh;
+    background-color: #012f47;
+    z-index: 3;
+  }
+  .searchBox {
+    position: absolute;
+    right: 100px;
+    bottom: 30px;
+    background: transparent;
+    padding: 20px;
+    z-index: 9;
+  }
 }
 </style>
