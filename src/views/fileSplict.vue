@@ -19,6 +19,22 @@
     </div>
     <el-divider></el-divider>
     <el-button size="medium" @click="exportToExcel">导出xlsx</el-button>
+    <el-divider></el-divider>
+    <el-upload
+        drag
+        action
+        accept=".xlsx, .xls"
+        :auto-upload="false"
+        :show-file-list="false"
+        :on-change="changeFile"
+    >
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">
+        <em>点击上传</em>
+      </div>
+    </el-upload>
+    <el-divider></el-divider>
+    <el-button size="medium" @click="downloadExcel">模板下载</el-button>
   </div>
 </template>
 
@@ -27,6 +43,7 @@
 // import axios from "axios"
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
+import xlsxToJson from "@/utils/xlsx";
 
 export default {
   name: 'App3',
@@ -252,6 +269,74 @@ export default {
         return buf;
       }
     },
+    // 批量导入
+    async changeFile(ev) {
+      // 获取文件
+      let file = ev.raw;
+      if (!file) return;
+      const loading = this.$loading({
+        text: "正在玩命为您处理中...",
+        background: "rgba(0,0,0,.5)",
+      });
+      // 基于XLSX把文件解析为JSON
+      let result = await xlsxToJson.readFile(file);
+      let weetbook = XLSX.read(result, { type: "binary" }),
+          weetsheek = weetbook.Sheets[weetbook.SheetNames[0]];
+      result = XLSX.utils.sheet_to_json(weetsheek);
+      result = xlsxToJson.formatWeetJSON(result);
+      // 把数据逐一上传到服务器端
+      let index = -1;
+      let complete = (flag) => {
+        loading.close();
+        xlsxToJson.message(this, {
+          message: `总共 ${result.length} 条数据，已经成功导入 ${
+              index + 1
+          } 条数据！${
+              flag ? "所有信息都已导入~~" : "导入过程中遇到问题，已经结束导入~~"
+          }`,
+          type: flag ? "success" : "warning",
+          onClose: () => {
+            //  this.$router.push("/");
+            // this.dialogImport = false;
+            // this.getWhitleList();
+          },
+        });
+      };
+      let send = async () => {
+        if (index >= result.length - 1) {
+          // 都传递成功了
+          complete(true);
+          return;
+        }
+        let item = result[++index];
+        // let res = this.addCustom(item); //后端接口 自行更换
+        // if (res.code == 0) {
+        send();
+        //     return;
+        // }
+        // 上传中遇到问题，结束上传
+        // complete(false);
+      };
+      send();
+    },
+    downloadExcel() {
+      // 自定义文件
+      const userAgent = navigator.userAgent;
+      let url="/xx.xlsx";
+      if (userAgent.indexOf("Firefox") > -1) {
+        window.location.href = url
+      } else if (userAgent.indexOf("Chrome") > -1) {
+        const aTag = document.createElement("a");
+        aTag.setAttribute("download", "");
+        aTag.setAttribute("href", url);
+        aTag.click();
+      } else {
+        const aTag = document.createElement("a");
+        aTag.setAttribute("download", "");
+        aTag.setAttribute("href", url);
+        aTag.click();
+      }
+    },
   }
 }
 </script>
@@ -268,5 +353,19 @@ export default {
   background-color: #ecf5ff;
   font-size: 14px;
   border-radius: 4px;
+}
+/deep/ .el-upload {
+  width: 178px !important;
+  height: 178px !important;
+}
+/deep/ .el-icon-plus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.pic {
+  width: 45px;
+  height: calc(45px * 1.235);
 }
 </style>
