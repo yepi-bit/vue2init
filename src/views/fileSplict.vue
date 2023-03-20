@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <!-- 上传组件 -->
     <el-upload action drag :auto-upload="false" :show-file-list="false" :on-change="handleChange">
       <i class="el-icon-upload"></i>
@@ -10,19 +10,23 @@
     <!-- 进度显示 -->
     <div class="progress-box">
       <span>上传进度：{{ percent.toFixed() }}%</span>
-      <el-button type="primary" size="mini" @click="handleClickBtn">{{ upload | btnTextFilter}}</el-button>
+      <el-button type="primary" size="mini" @click="handleClickBtn">{{ upload | btnTextFilter }}</el-button>
     </div>
 
     <!-- 展示上传成功的视频 -->
     <div v-if="videoUrl">
-      <video :src="videoUrl" controls />
+      <video :src="videoUrl" controls/>
     </div>
+    <el-divider></el-divider>
+    <el-button size="medium" @click="exportToExcel">导出xlsx</el-button>
   </div>
 </template>
 
 <script>
 // import SparkMD5 from "spark-md5"
 // import axios from "axios"
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 
 export default {
   name: 'App3',
@@ -151,7 +155,103 @@ export default {
           reject(new Error('转换文件格式发生错误'))
         }
       })
-    }
+    },
+    // 导出
+    exportToExcel() {
+      const loading = this.$loading({
+        fullscreen: false,
+        text: "正在处理中...",
+        background: "rgba(0,0,0,.1)",
+      });
+      var table = [];
+      var index = 1;
+      var totals = 2;
+      do {
+        let data = [
+          {
+            name: 'yepi',
+            identity: '贵族',
+            tags: '好',
+            message: '有',
+            datetime: '2023-03-20',
+            status: 0
+          },
+          {
+            name: 'yepi-bit',
+            identity: '贵族',
+            tags: 'good',
+            message: '有',
+            datetime: '2023-03-19',
+            status: 1
+          }
+        ]
+        for (let pass of data) {
+          var params = {
+            姓名: pass.name,
+            身份证号: pass.identity,
+            布控标签: pass.tags,
+            报警类型: pass.message,
+            报警时间: pass.datetime,
+            处理状态: pass.status === 0 ? "待处理" : "已处理",
+          };
+          table.push(params);
+        }
+        index++;
+      } while (table.length < totals);
+      let date = new Date();
+      var filename =
+          "报警记录" +
+          date.getFullYear().toString() +
+          (date.getMonth() + 1).toString() +
+          date.getDate().toString() +
+          ".xlsx";
+      this.ToExcel(table, filename);
+      loading.close();
+    },
+    ToExcel(data, filename) {
+      //取数据 导出
+      var wopts = {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "binary",
+      };
+      var workBook = {
+        SheetNames: ["Sheet1"],
+        Sheets: {},
+        Props: {},
+      };
+      //1、XLSX.utils.json_to_sheet(data) 接收一个对象数组并返回一个基于对象关键字自动生成的“标题”的工作表，默认的列顺序由使用Object.keys的字段的第一次出现确定
+      //2、将数据放入对象workBook的Sheets中等待输出
+      workBook.Sheets["Sheet1"] = XLSX.utils.json_to_sheet(data);
+
+      //3、XLSX.write() 开始编写Excel表格
+      //4、changeData() 将数据处理成需要输出的格式
+
+      FileSaver.saveAs(
+          new Blob([this.changeData(XLSX.write(workBook, wopts))], {
+            type: "application/octet-stream",
+          }),
+          filename
+      );
+    },
+    changeData(s) {
+      //如果存在ArrayBuffer对象(es6) 最好采用该对象
+      if (typeof ArrayBuffer !== "undefined") {
+        //1、创建一个字节长度为s.length的内存区域
+        var buf = new ArrayBuffer(s.length);
+
+        //2、创建一个指向buf的Unit8视图，开始于字节0，直到缓冲区的末尾
+        var view = new Uint8Array(buf);
+
+        //3、返回指定位置的字符的Unicode编码
+        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
+      } else {
+        var buf = new Array(s.length);
+        for (var i = 0; i != s.length; ++i) buf[i] = s.charCodeAt(i) & 0xff;
+        return buf;
+      }
+    },
   }
 }
 </script>
