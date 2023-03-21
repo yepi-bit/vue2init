@@ -81,6 +81,19 @@ const routes = [
         path: '/areaMap',
         name: 'areaMap',
         component: () => import('../views/areaMap.vue')
+    },
+    {
+        path: '/windMap',
+        name: 'windMap',
+        component: () => import('../views/windMap.vue')
+    },
+    {
+        path: '/storeAsync',
+        name: 'storeAsync',
+        meta: {
+            needLogin: true
+        },
+        component: () => import('../views/storeAsync.vue')
     }
 ]
 const routes2 = [{

@@ -64,6 +64,14 @@
       <router-link to="/areaMap">
         <el-button size="mini">areaMap</el-button>
       </router-link>
+      |
+      <router-link to="/windMap">
+        <el-button size="mini">windMap</el-button>
+      </router-link>
+      |
+      <router-link to="/storeAsync">
+        <el-button size="mini">storeAsync</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">
