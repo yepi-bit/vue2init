@@ -94,6 +94,14 @@ const routes = [
             needLogin: true
         },
         component: () => import('../views/storeAsync.vue')
+    },
+    {
+        path: '/map2d-t',
+        name: 'map2d-t',
+        meta: {
+            needLogin: true
+        },
+        component: () => import('../views/map2d-t.vue')
     }
 ]
 const routes2 = [{

@@ -72,6 +72,10 @@
       <router-link to="/storeAsync">
         <el-button size="mini">storeAsync</el-button>
       </router-link>
+      |
+      <router-link to="/map2d-t">
+        <el-button size="mini">map2d-t</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">
