@@ -1,6 +1,10 @@
 <template>
   <div class="gis">
     <div id="map"></div>
+    <div class="topRight">
+      <div style="font-size: 14px;padding: 6px">颜色透明度</div>
+      <el-color-picker v-model="colorPicker" @active-change="activeChange"></el-color-picker>
+    </div>
     <div class="searchBox">
       <el-dropdown split-button placement="top">
         更多菜单
@@ -22,6 +26,7 @@ import 'leaflet/dist/leaflet.css'
 export default {
   data() {
     return {
+      colorPicker: 'rgba(254,141,039,0.3)',
       map: null,
       tileLayer: null,
       plotLayer: null,
@@ -118,15 +123,15 @@ export default {
           "policePhone": "0665890198987"
         }
       ],
-      peopelLine:[
+      peopelLine: [
         {gis: "39.898109,116.34419"},
         {gis: "39.896338,116.418354"},
         {gis: "39.883051, 116.377535"}
       ],
-      circleList:[],
-      markerList:[],
-      recoard:[],
-      lineList:[]
+      circleList: [],
+      markerList: [],
+      recoard: [],
+      lineList: []
     }
   },
   mounted() {
@@ -226,7 +231,7 @@ export default {
               var pointC = _this.IsPtInPoly(JSON.parse(item.lon), JSON.parse(item.lon), dataPoint)
               if (pointC == true) {
                 _this.recoard.push(item)
-              }else {
+              } else {
                 console.log('pointC为false')
               }
             }
@@ -261,6 +266,10 @@ export default {
           }
         },
       })
+    },
+    activeChange(v) {
+      this.colorPicker = v
+      this.isWarnPointInpoly(this.alonePeople)
     },
     drawPolyline() {
       this.workDraw.stopDraw();
@@ -499,11 +508,12 @@ export default {
     },
     areaInfoTemp(data) {
       this.plotLayerTemp.clearLayers();
+      let fillColor = this.colorPicker
       var polygon = L.polygon(data, {
-        color: '#ff2123',
+        color: fillColor,
         weight: 1,
         opacity: 0.8,
-        fillColor: '#ff2b3e',
+        fillColor: fillColor,
         fillOpacity: 0.8
       }).addTo(this.plotLayerTemp); // 在地图上添加注记
     },
@@ -552,18 +562,28 @@ export default {
 <style lang="less" scoped>
 .gis {
   position: relative;
+
   #map {
     width: 100vw;
     height: 90vh;
     background-color: #012f47;
     z-index: 3;
   }
+
   .searchBox {
     position: absolute;
     right: 100px;
     bottom: 30px;
     background: transparent;
     padding: 20px;
+    z-index: 9;
+  }
+  .topRight {
+    position: absolute;
+    right: 10px;
+    top: 50px;
+    background: #FFFFFF;
+    padding: 10px;
     z-index: 9;
   }
 }
