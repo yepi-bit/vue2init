@@ -102,6 +102,22 @@ const routes = [
             needLogin: true
         },
         component: () => import('../views/map2d-t.vue')
+    },
+    {
+        path: '/iframeSendValue',
+        name: 'iframeSendValue',
+        meta: {
+            needLogin: true
+        },
+        component: () => import('../views/iframeSendValue.vue')
+    },
+    {
+        path: '/iframeFa',
+        name: 'iframeFa',
+        meta: {
+            needLogin: true
+        },
+        component: () => import('../views/iframeFa.vue')
     }
 ]
 const routes2 = [{

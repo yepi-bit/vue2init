@@ -76,6 +76,14 @@
       <router-link to="/map2d-t">
         <el-button size="mini">map2d-t</el-button>
       </router-link>
+      |
+      <router-link to="/iframeSendValue">
+        <el-button size="mini">iframeSendValue</el-button>
+      </router-link>
+      |
+      <router-link to="/iframeFa">
+        <el-button size="mini">iframeFa</el-button>
+      </router-link>
     </div>
     <router-view v-slot="{ Component }">
       <transition :name="transitionName">
